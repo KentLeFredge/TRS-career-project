@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRS — Mode Carrière</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   THEME VARIABLES — seul ce bloc change par champ
+   ═══════════════════════════════════════════════ */
+:root {
+  --accent:       #d40022;
+  --accent-dim:   #8a0016;
+  --accent-glow:  rgba(212,0,34,0.15);
+  --secondary:    #13592a;
+  --secondary-lt: #1a7a3a;
+  --secondary-dim:#0d3d1d;
+  --gold:         #c9a84c;
+  --gold-dim:     #7a6128;
+
+  --noir:         #121212;
+  --noir-2:       #1a1a1a;
+  --noir-3:       #242424;
+  --noir-4:       #2e2e2e;
+  --blanc:        #ffffff;
+  --gris:         #8a8a8a;
+  --gris-lt:      #c0c0c0;
+  --success:      #4ade80;
+  --warning:      #f59e0b;
+  --danger:       #f87171;
+}
+
+/* ── RESET ─────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--noir);color:var(--blanc);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
+button{cursor:pointer;font-family:inherit;}
+a{cursor:pointer;text-decoration:none;}
+
+/* ── HEADER ─────────────────────────────────────── */
+header{
+  position:sticky;top:0;z-index:200;
+  background:var(--noir-2);
+  border-bottom:2px solid var(--accent);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:60px;gap:16px;
+}
+.logo{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.logo-mark{
+  width:36px;height:36px;background:var(--accent);
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;
+}
+.logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;letter-spacing:2px;text-transform:uppercase;line-height:1;}
+.logo-text span{display:block;font-size:10px;font-weight:400;color:var(--gris);letter-spacing:3px;}
+
+nav{display:flex;align-items:center;gap:4px;flex:1;justify-content:center;overflow-x:auto;scrollbar-width:none;}
+nav::-webkit-scrollbar{display:none;}
+nav a{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--gris-lt);
+  padding:6px 14px;border-radius:3px;transition:all .2s;white-space:nowrap;
+}
+nav a:hover{color:var(--blanc);background:var(--noir-3);}
+nav a.active{color:var(--blanc);background:var(--accent);}
+
+.header-right{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.budget{
+  background:var(--secondary-dim);border:1px solid var(--secondary);
+  border-radius:4px;padding:4px 12px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--success);
+}
+.budget small{font-size:10px;color:var(--secondary-lt);letter-spacing:1px;text-transform:uppercase;display:block;font-weight:400;}
+.profile-btn{
+  display:flex;align-items:center;gap:8px;
+  background:var(--noir-3);border:1px solid var(--noir-4);
+  border-radius:4px;padding:6px 10px;transition:border-color .2s;
+}
+.profile-btn:hover{border-color:var(--gris);}
+.avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--secondary));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;
+}
+.profile-name{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;}
+.profile-role{font-size:10px;color:var(--gris);letter-spacing:1px;text-transform:uppercase;}
+
+/* ── PAGES ───────────────────────────────────────── */
+.page{display:none;max-width:1280px;margin:0 auto;padding:28px 24px;}
+.page.active{display:grid;gap:24px;animation:fadeIn .3s ease;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── UTILITY ─────────────────────────────────────── */
+.page-title{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;}
+.page-title h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(26px,4vw,40px);text-transform:uppercase;letter-spacing:1px;line-height:1;}
+.page-title h1 em{color:var(--accent);font-style:normal;}
+.page-subtitle{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);border-top:1px solid var(--gris);padding-top:4px;white-space:nowrap;}
+
+.card{background:var(--noir-2);border:1px solid var(--noir-4);border-radius:6px;overflow:hidden;}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--noir-4);gap:12px;}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.dot.g{background:var(--success);}
+.dot.go{background:var(--gold);}
+.dot.w{background:var(--gris-lt);}
+.card-link{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gris);transition:color .2s;}
+.card-link:hover{color:var(--blanc);}
+
+/* pills */
+.pill{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:3px;padding:2px 8px;display:inline-block;}
+.pill.open{background:rgba(19,89,42,.3);color:var(--success);border:1px solid var(--secondary);}
+.pill.full{background:rgba(212,0,34,.2);color:#ff6680;border:1px solid var(--accent-dim);}
+.pill.reg{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid var(--gold-dim);}
+.pill.done{background:rgba(100,100,100,.2);color:var(--gris);border:1px solid var(--noir-4);}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;border:none;border-radius:4px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:1.5px;text-transform:uppercase;padding:10px 20px;transition:all .2s;
+}
+.btn-red{background:var(--accent);color:var(--blanc);}
+.btn-red:hover{background:#b0001c;transform:translateY(-1px);}
+.btn-green{background:var(--secondary-dim);color:var(--success);border:1px solid var(--secondary);}
+.btn-green:hover{background:var(--secondary);color:var(--blanc);}
+.btn-ghost{background:transparent;color:var(--gris-lt);border:1px solid var(--noir-4);}
+.btn-ghost:hover{border-color:var(--gris);color:var(--blanc);}
+.btn-gold{background:rgba(201,168,76,.15);color:var(--gold);border:1px solid var(--gold-dim);}
+.btn-gold:hover{background:rgba(201,168,76,.3);}
+.btn-sm{padding:6px 14px;font-size:11px;}
+
+/* bars */
+.bar-track{height:4px;background:var(--noir-4);border-radius:2px;overflow:hidden;margin:4px 0;}
+.bar-fill{height:100%;border-radius:2px;}
+.bar-r{background:var(--accent);}
+.bar-g{background:var(--success);}
+.bar-b{background:#60a5fa;}
+.bar-go{background:var(--gold);}
+
+/* stats strip */
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--noir-4);border-radius:6px;overflow:hidden;}
+.stat-block{background:var(--noir-2);padding:16px 20px;position:relative;overflow:hidden;transition:background .2s;}
+.stat-block:hover{background:var(--noir-3);}
+.stat-block::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+.sb-r::before{background:var(--accent);}
+.sb-g::before{background:var(--success);}
+.sb-go::before{background:var(--gold);}
+.sb-w::before{background:var(--gris-lt);}
+.stat-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:6px;}
+.stat-value{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(22px,3vw,34px);line-height:1;letter-spacing:-0.5px;}
+.sb-r .stat-value{color:var(--accent);}
+.sb-g .stat-value{color:var(--success);}
+.sb-go .stat-value{color:var(--gold);}
+.stat-sub{font-size:11px;color:var(--gris);margin-top:4px;}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{background:var(--secondary);color:var(--blanc);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:10px 14px;text-align:left;}
+.tbl td{padding:12px 14px;font-size:13px;border-bottom:1px solid var(--noir-3);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--noir-3);}
+.tbl tr.me td{background:rgba(19,89,42,.1);border-left:3px solid var(--secondary);}
+
+/* input */
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);}
+.form-input{
+  background:var(--noir-3);border:1px solid var(--noir-4);border-radius:4px;
+  color:var(--blanc);font-family:'Barlow',sans-serif;font-size:14px;padding:10px 14px;
+  transition:border-color .2s;outline:none;
+}
+.form-input:focus{border-color:var(--accent);}
+select.form-input option{background:var(--noir-3);}
+
+/* scan lines */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);
+}
+
+/* ═══════════════════════════════════════════════
+   PAGE : DASHBOARD
+   ═══════════════════════════════════════════════ */
+.dash-grid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;}
+.dash-left{display:grid;gap:16px;}
+.dash-right{display:grid;gap:16px;}
+
+.next-race-wrap{position:relative;overflow:hidden;}
+.next-race-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--noir-3),var(--secondary-dim));opacity:.6;}
+.next-race-content{position:relative;padding:24px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;}
+.race-badge{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--success);background:rgba(19,89,42,.4);border:1px solid var(--secondary);border-radius:3px;padding:3px 8px;display:inline-block;margin-bottom:10px;}
+.race-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(18px,2.5vw,26px);text-transform:uppercase;letter-spacing:1px;line-height:1.1;margin-bottom:8px;}
+.race-meta{font-size:13px;color:var(--gris-lt);margin-bottom:14px;}
+.countdown-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:6px;text-align:right;}
+.countdown-blocks{display:flex;gap:6px;justify-content:flex-end;}
+.cd-block{background:var(--noir);border:1px solid var(--noir-4);border-radius:4px;padding:6px 10px;text-align:center;min-width:48px;}
+.cd-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;line-height:1;color:var(--accent);}
+.cd-unit{font-size:9px;color:var(--gris);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+
+.event-item{display:grid;grid-template-columns:60px 1fr auto;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--noir-3);transition:background .15s;cursor:pointer;}
+.event-item:last-child{border-bottom:none;}
+.event-item:hover{background:var(--noir-3);}
+.ev-day{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;line-height:1;color:var(--accent);text-align:center;}
+.ev-month{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);text-align:center;}
+.ev-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px;margin-bottom:3px;}
+.ev-meta{font-size:11px;color:var(--gris);}
+.ev-slots{text-align:right;}
+
+/* car card sidebar */
+.car-visual{height:110px;background:linear-gradient(135deg,#0d0d0d,var(--secondary-dim));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.car-visual::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to top,var(--noir-2),transparent);}
+.car-silhouette{font-size:64px;opacity:.12;transform:scaleX(-1);filter:blur(1px);user-select:none;}
+.car-name-overlay{position:absolute;bottom:10px;left:14px;z-index:2;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;text-transform:uppercase;}
+.car-body{padding:14px 16px;}
+.car-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.car-stat-label{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:3px;}
+.car-stat-val{font-size:11px;font-weight:600;color:var(--gris-lt);margin-top:2px;}
+.car-state{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--noir-4);font-size:12px;}
+.state-lbl{color:var(--gris);}
+.state-val{font-weight:700;color:var(--success);}
+.state-val.warn{color:var(--warning);}
+
+/* ranking */
+.rank-item{display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--noir-3);cursor:pointer;transition:background .15s;}
+.rank-item:last-child{border-bottom:none;}
+.rank-item:hover{background:var(--noir-3);}
+.rank-item.me{background:rgba(19,89,42,.12);border-left:3px solid var(--secondary);}
+.rank-pos{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;width:28px;text-align:center;flex-shrink:0;}
+.rank-name{flex:1;font-size:13px;font-weight:600;}
+.rank-pts{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--gris-lt);text-align:right;}
+.rank-pts small{display:block;font-size:9px;color:var(--gris);letter-spacing:1px;text-transform:uppercase;font-weight:400;font-family:'Barlow',sans-serif;}
+
+/* ═══════════════════════════════════════════════
+   PAGE : CALENDRIER
+   ═══════════════════════════════════════════════ */
+.cal-filters{display:flex;gap:10px;flex-wrap:wrap;}
+.filter-btn{
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:12px;
+  letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:3px;
+  background:var(--noir-3);color:var(--gris-lt);border:1px solid var(--noir-4);transition:all .2s;
+}
+.filter-btn.active,.filter-btn:hover{background:var(--accent);color:var(--blanc);border-color:var(--accent);}
+
+.cal-card{
+  display:grid;grid-template-columns:80px 1fr auto;gap:20px;
+  padding:20px 24px;border-bottom:1px solid var(--noir-3);align-items:center;
+  transition:background .15s;cursor:pointer;
+}
+.cal-card:last-child{border-bottom:none;}
+.cal-card:hover{background:var(--noir-3);}
+.cal-date-block{text-align:center;}
+.cal-day{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;line-height:1;color:var(--accent);}
+.cal-month{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gris);}
+.cal-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.cal-details{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--gris-lt);}
+.cal-detail-item{display:flex;align-items:center;gap:5px;}
+.cal-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.slots-bar{width:80px;margin-top:4px;}
+
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
+.modal{
+  background:var(--noir-2);border:1px solid var(--noir-4);border-radius:8px;
+  width:100%;max-width:540px;overflow:hidden;
+}
+.modal-header{
+  background:var(--accent);padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;text-transform:uppercase;letter-spacing:1px;}
+.modal-close{background:none;border:none;color:var(--blanc);font-size:20px;cursor:pointer;opacity:.7;transition:opacity .2s;}
+.modal-close:hover{opacity:1;}
+.modal-body{padding:24px;display:grid;gap:16px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--noir-4);display:flex;gap:10px;justify-content:flex-end;}
+
+/* ═══════════════════════════════════════════════
+   PAGE : GARAGE
+   ═══════════════════════════════════════════════ */
+.garage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.garage-card{background:var(--noir-2);border:1px solid var(--noir-4);border-radius:6px;overflow:hidden;transition:border-color .2s;}
+.garage-card:hover{border-color:var(--noir-4);}
+.garage-card.active-car{border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,.1);}
+.gc-visual{height:130px;background:linear-gradient(135deg,#0d0d0d,var(--secondary-dim));position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.gc-visual::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(to top,var(--noir-2),transparent);}
+.gc-emoji{font-size:72px;opacity:.15;filter:blur(1px);transform:scaleX(-1);}
+.gc-badge{position:absolute;top:10px;right:10px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--gold);color:var(--noir);padding:3px 8px;border-radius:3px;}
+.gc-name-overlay{position:absolute;bottom:12px;left:14px;z-index:2;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:17px;text-transform:uppercase;letter-spacing:.5px;}
+.gc-body{padding:16px;}
+.gc-specs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.gc-spec-lbl{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);margin-bottom:3px;}
+.gc-spec-val{font-size:11px;color:var(--gris-lt);}
+.gc-state-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--noir-4);font-size:12px;}
+.gc-actions{display:flex;gap:8px;padding-top:12px;flex-wrap:wrap;}
+
+/* ═══════════════════════════════════════════════
+   PAGE : R&D
+   ═══════════════════════════════════════════════ */
+.rnd-layout{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;}
+.car-selector{padding:8px 0;}
+.car-sel-item{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--noir-3);
+  cursor:pointer;transition:background .15s;
+}
+.car-sel-item:last-child{border-bottom:none;}
+.car-sel-item:hover{background:var(--noir-3);}
+.car-sel-item.selected{background:var(--accent-glow);border-left:3px solid var(--accent);}
+.car-sel-mini{font-size:28px;}
+.car-sel-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:.5px;}
+.car-sel-state{font-size:11px;color:var(--gris);}
+
+.rnd-upgrades{display:grid;gap:16px;}
+.upgrade-card{background:var(--noir-2);border:1px solid var(--noir-4);border-radius:6px;overflow:hidden;}
+.upgrade-header{
+  display:flex;align-items:center;justify-content:space-between;padding:14px 20px;
+  border-bottom:1px solid var(--noir-4);
+}
+.upgrade-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;}
+.upgrade-lvl{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:var(--accent);}
+.upgrade-body{padding:16px 20px;}
+.upgrade-bar-row{margin-bottom:14px;}
+.upgrade-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--gris);margin-bottom:6px;}
+.upgrade-options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.upgrade-option{
+  background:var(--noir-3);border:1px solid var(--noir-4);border-radius:4px;padding:14px;
+  text-align:center;cursor:pointer;transition:all .2s;
+}
+.upgrade-option:hover{border-color:var(--accent);background:var(--accent-glow);}
+.upgrade-option.disabled{opacity:.4;cursor:not-allowed;pointer-events:none;}
+.uo-risk{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.uo-risk.safe{color:var(--success);}
+.uo-risk.std{color:var(--gold);}
+.uo-risk.exp{color:var(--accent);}
+.uo-rate{font-size:20px;font-weight:700;margin-bottom:4px;}
+.uo-gain{font-size:11px;color:var(--gris);}
+.uo-cost{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;margin-top:8px;color:var(--gris-lt);}
+
+/* result modal */
+.result-success{text-align:center;padding:20px;}
+.result-icon{font-size:48px;margin-bottom:12px;}
+.result-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.result-desc{font-size:14px;color:var(--gris-lt);}
+
+/* ═══════════════════════════════════════════════
+   PAGE : RÉSULTATS
+   ═══════════════════════════════════════════════ */
+.results-tabs{display:flex;gap:2px;background:var(--noir-4);border-radius:6px;padding:4px;width:fit-content;}
+.rtab{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;
+  letter-spacing:1.5px;text-transform:uppercase;padding:8px 18px;border-radius:4px;
+  background:transparent;color:var(--gris);border:none;transition:all .2s;cursor:pointer;
+}
+.rtab.active{background:var(--accent);color:var(--blanc);}
+.rtab:hover:not(.active){color:var(--blanc);background:var(--noir-3);}
+
+.results-content{display:none;}
+.results-content.active{display:block;animation:fadeIn .3s ease;}
+
+.palmares-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.palmares-card{background:var(--noir-2);border:1px solid var(--noir-4);border-radius:6px;padding:20px;text-align:center;}
+.palm-value{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;line-height:1;margin-bottom:4px;}
+.palm-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gris);}
+
+.course-result-item{display:grid;grid-template-columns:80px 1fr auto;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--noir-3);}
+.course-result-item:last-child{border-bottom:none;}
+.cr-pos{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;text-align:center;}
+.cr-pos.p1{color:var(--gold);}
+.cr-pos.p2{color:var(--gris-lt);}
+.cr-pos.p3{color:#cd7f32;}
+.cr-circuit{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:4px;}
+.cr-meta{font-size:12px;color:var(--gris);}
+.cr-pts{text-align:right;}
+.cr-pts-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--success);}
+.cr-pts-lbl{font-size:10px;color:var(--gris);letter-spacing:1px;text-transform:uppercase;}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
+@media(max-width:900px){
+  .dash-grid{grid-template-columns:1fr;}
+  .stats-strip{grid-template-columns:repeat(2,1fr);}
+  .rnd-layout{grid-template-columns:1fr;}
+  .palmares-grid{grid-template-columns:repeat(2,1fr);}
+  .next-race-content{grid-template-columns:1fr;}
+  .countdown-label,.countdown-blocks{text-align:left;justify-content:flex-start;}
+}
+@media(max-width:600px){
+  header{padding:0 14px;}
+  .logo-text span,.budget small{display:none;}
+  nav a{font-size:11px;padding:5px 8px;}
+  .page{padding:16px 14px;}
+  .stats-strip{grid-template-columns:repeat(2,1fr);}
+  .upgrade-options{grid-template-columns:1fr;}
+  .garage-grid{grid-template-columns:1fr;}
+  .cal-card{grid-template-columns:60px 1fr;gap:12px;}
+  .cal-actions{display:none;}
+  .palmares-grid{grid-template-columns:repeat(2,1fr);}
+  .course-result-item{grid-template-columns:60px 1fr auto;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">RS</div>
+    <div class="logo-text">Revival Series<span>Mode Carrière</span></div>
+  </div>
+  <nav>
+    <a class="active" onclick="showPage('dashboard',this)">Dashboard</a>
+    <a onclick="showPage('calendrier',this)">Calendrier</a>
+    <a onclick="showPage('garage',this)">Mon Garage</a>
+    <a onclick="showPage('rnd',this)">R&amp;D</a>
+    <a onclick="showPage('resultats',this)">Résultats</a>
+  </nav>
+  <div class="header-right">
+    <div class="budget"><small>Budget</small>42 500 €</div>
+    <div class="profile-btn">
+      <div class="avatar">KF</div>
+      <div>
+        <div class="profile-name">Kent_LeFredge</div>
+        <div class="profile-role">Pilote</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE : DASHBOARD
+     ═══════════════════════════════════════════════ -->
+<div class="page active" id="page-dashboard">
+  <div class="page-title">
+    <h1>Tableau de <em>bord</em></h1>
+    <div class="page-subtitle">Saison 2025 — 60's Time Machine</div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-block sb-r"><div class="stat-label">Classement</div><div class="stat-value">4<sup style="font-size:.5em;color:var(--gris)">e</sup></div><div class="stat-sub">/ 18 pilotes</div></div>
+    <div class="stat-block sb-go"><div class="stat-label">Points</div><div class="stat-value">187</div><div class="stat-sub">−12 vs 3e place</div></div>
+    <div class="stat-block sb-g"><div class="stat-label">Voitures</div><div class="stat-value">2</div><div class="stat-sub">dans le garage</div></div>
+    <div class="stat-block sb-w"><div class="stat-label">Courses</div><div class="stat-value">7</div><div class="stat-sub">3 victoires · 1 podium</div></div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="dash-left">
+      <!-- prochaine course -->
+      <div class="card next-race-wrap">
+        <div class="next-race-bg"></div>
+        <div class="card-header" style="position:relative">
+          <div class="card-title"><div class="dot g"></div>Prochaine course</div>
+          <a class="card-link" onclick="showPage('calendrier',document.querySelector('nav a:nth-child(2)'))">Calendrier →</a>
+        </div>
+        <div class="next-race-content">
+          <div>
+            <div class="race-badge">● INSCRIT</div>
+            <div class="race-name">Grand Prix de Spa-Francorchamps</div>
+            <div class="race-meta">Samedi 15 Mars · 20h00 · 60's GTs · 18/20 pilotes</div>
+            <button class="btn btn-green" onclick="showPage('calendrier',document.querySelector('nav a:nth-child(2)'))">✓ Inscrit — Alfa Romeo 33 Stradale</button>
+          </div>
+          <div class="countdown">
+            <div class="countdown-label">Dans</div>
+            <div class="countdown-blocks">
+              <div class="cd-block"><div class="cd-num">04</div><div class="cd-unit">Jours</div></div>
+              <div class="cd-block"><div class="cd-num">17</div><div class="cd-unit">Heures</div></div>
+              <div class="cd-block"><div class="cd-num">32</div><div class="cd-unit">Min</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- mini calendrier -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot"></div>Prochains événements</div>
+          <a class="card-link" onclick="showPage('calendrier',document.querySelector('nav a:nth-child(2)'))">Tout voir →</a>
+        </div>
+        <div class="event-item" onclick="showPage('calendrier',document.querySelector('nav a:nth-child(2)'))">
+          <div><div class="ev-day">15</div><div class="ev-month">Mars</div></div>
+          <div><div class="ev-name">Spa-Francorchamps</div><div class="ev-meta">60's GTs · 20 slots</div></div>
+          <div class="ev-slots"><span class="pill reg">Inscrit</span><div style="font-size:10px;color:var(--gris);margin-top:4px">18/20</div></div>
+        </div>
+        <div class="event-item" onclick="showPage('calendrier',document.querySelector('nav a:nth-child(2)'))">
+          <div><div class="ev-day">29</div><div class="ev-month">Mars</div></div>
+          <div><div class="ev-name">Monza GP Circuit</div><div class="ev-meta">60's GTs · 20 slots</div></div>
+          <div class="ev-slots"><span class="pill open">Ouvert</span><div style="font-size:10px;color:var(--gris);margin-top:4px">11/20</div></div>
+        </div>
+        <div class="event-item" onclick="showPage('calendrier',document.querySelector('nav a:nth-child(2)'))">
+          <div><div class="ev-day">12</div><div class="ev-month">Avr</div></div>
+          <div><div class="ev-name">Nürburgring GP-Strecke</div><div class="ev-meta">60's GTs · 20 slots</div></div>
+          <div class="ev-slots"><span class="pill open">Ouvert</span><div style="font-size:10px;color:var(--gris);margin-top:4px">7/20</div></div>
+        </div>
+        <div class="event-item" onclick="showPage('calendrier',document.querySelector('nav a:nth-child(2)'))">
+          <div><div class="ev-day">26</div><div class="ev-month">Avr</div></div>
+          <div><div class="ev-name">Circuit de Barcelone</div><div class="ev-meta">60's GTs · 20 slots</div></div>
+          <div class="ev-slots"><span class="pill full">Complet</span><div style="font-size:10px;color:var(--gris);margin-top:4px">20/20</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-right">
+      <!-- voiture active -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot go"></div>Voiture active</div>
+          <a class="card-link" onclick="showPage('garage',document.querySelector('nav a:nth-child(3)'))">Garage →</a>
+        </div>
+        <div class="car-visual"><div class="car-silhouette">🏎</div><div class="car-name-overlay">Alfa Romeo 33 Stradale</div></div>
+        <div class="car-body">
+          <div class="car-stats-grid">
+            <div><div class="car-stat-label">Moteur</div><div class="bar-track"><div class="bar-fill bar-r" style="width:70%"></div></div><div class="car-stat-val">LVL 7/10</div></div>
+            <div><div class="car-stat-label">Aéro</div><div class="bar-track"><div class="bar-fill bar-b" style="width:60%"></div></div><div class="car-stat-val">LVL 12/20</div></div>
+            <div><div class="car-stat-label">Freins</div><div class="bar-track"><div class="bar-fill bar-go" style="width:85%"></div></div><div class="car-stat-val">LVL 8.5/10</div></div>
+            <div><div class="car-stat-label">Châssis</div><div class="bar-track"><div class="bar-fill bar-g" style="width:50%"></div></div><div class="car-stat-val">LVL 5/10</div></div>
+          </div>
+          <div class="car-state"><span class="state-lbl">État carrosserie</span><span class="state-val warn">78% — Usée</span></div>
+          <div class="car-state"><span class="state-lbl">Perf. globale</span><span class="state-val">+34% vs stock</span></div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn btn-gold btn-sm" onclick="showPage('rnd',document.querySelector('nav a:nth-child(4)'))">⚡ R&amp;D</button>
+            <button class="btn btn-ghost btn-sm">🔧 Réparer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- classement -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><div class="dot go"></div>Championnat 60's GTs</div>
+          <a class="card-link" onclick="showPage('resultats',document.querySelector('nav a:nth-child(5)'))">Tout →</a>
+        </div>
+        <div class="rank-item"><div class="rank-pos" style="color:var(--gold)">1</div><div class="rank-name">Nopitch_RS</div><div class="rank-pts">214<small>points</small></div></div>
+        <div class="rank-item"><div class="rank-pos" style="color:var(--gris-lt)">2</div><div class="rank-name">Cocci_Events</div><div class="rank-pts">202<small>points</small></div></div>
+        <div class="rank-item"><div class="rank-pos" style="color:#cd7f32">3</div><div class="rank-name">Boule_GR</div><div class="rank-pts">199<small>points</small></div></div>
+        <div class="rank-item me"><div class="rank-pos" style="color:var(--success)">4</div><div class="rank-name" style="color:var(--success)">Kent_LeFredge ◄</div><div class="rank-pts" style="color:var(--success)">187<small>points</small></div></div>
+        <div class="rank-item"><div class="rank-pos" style="color:var(--gris)">5</div><div class="rank-name">Turbotard_RS</div><div class="rank-pts">171<small>points</small></div></div>
+        <div class="rank-item"><div class="rank-pos" style="color:var(--gris)">6</div><div class="rank-name">Lokopixo</div><div class="rank-pts">158<small>points</small></div></div>
+        <div style="padding:8px;text-align:center;font-size:10px;color:var(--gris);letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--noir-3)">Écart avec le 3e : −12 pts</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE : CALENDRIER
+     ═══════════════════════════════════════════════ -->
+<div class="page" id="page-calendrier">
+  <div class="page-title">
+    <h1>Calen<em>drier</em></h1>
+    <div class="page-subtitle">Saison 2025 — 8 événements</div>
+  </div>
+
+  <div class="cal-filters">
+    <button class="filter-btn active">Tous</button>
+    <button class="filter-btn">À venir</button>
+    <button class="filter-btn">Mes inscriptions</button>
+    <button class="filter-btn">Terminés</button>
+  </div>
+
+  <div class="card">
+    <!-- event 1 — inscrit -->
+    <div class="cal-card" onclick="openModal('modal-inscription','Spa-Francorchamps','15 Mars 2025','reg')">
+      <div class="cal-date-block"><div class="cal-day">15</div><div class="cal-month">Mars</div></div>
+      <div>
+        <div class="cal-name">Spa-Francorchamps</div>
+        <div class="cal-details">
+          <span class="cal-detail-item">🕗 Samedi 20h00</span>
+          <span class="cal-detail-item">⏱ 60 min</span>
+          <span class="cal-detail-item">🏷 60's GTs</span>
+          <span class="cal-detail-item">👥 18/20 pilotes</span>
+        </div>
+        <div class="bar-track slots-bar" style="margin-top:8px"><div class="bar-fill bar-go" style="width:90%"></div></div>
+      </div>
+      <div class="cal-actions">
+        <span class="pill reg">✓ Inscrit</span>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">Détails</button>
+      </div>
+    </div>
+    <!-- event 2 — ouvert -->
+    <div class="cal-card" onclick="openModal('modal-inscription','Monza GP Circuit','29 Mars 2025','open')">
+      <div class="cal-date-block"><div class="cal-day">29</div><div class="cal-month">Mars</div></div>
+      <div>
+        <div class="cal-name">Monza GP Circuit</div>
+        <div class="cal-details">
+          <span class="cal-detail-item">🕗 Samedi 20h00</span>
+          <span class="cal-detail-item">⏱ 60 min</span>
+          <span class="cal-detail-item">🏷 60's GTs</span>
+          <span class="cal-detail-item">👥 11/20 pilotes</span>
+        </div>
+        <div class="bar-track slots-bar" style="margin-top:8px"><div class="bar-fill bar-g" style="width:55%"></div></div>
+      </div>
+      <div class="cal-actions">
+        <span class="pill open">Ouvert</span>
+        <button class="btn btn-red btn-sm" onclick="event.stopPropagation();openModal('modal-inscription','Monza GP Circuit','29 Mars 2025','open')">S'inscrire</button>
+      </div>
+    </div>
+    <!-- event 3 — ouvert -->
+    <div class="cal-card" onclick="openModal('modal-inscription','Nürburgring GP','12 Avr 2025','open')">
+      <div class="cal-date-block"><div class="cal-day">12</div><div class="cal-month">Avr</div></div>
+      <div>
+        <div class="cal-name">Nürburgring GP-Strecke</div>
+        <div class="cal-details">
+          <span class="cal-detail-item">🕗 Samedi 20h00</span>
+          <span class="cal-detail-item">⏱ 90 min</span>
+          <span class="cal-detail-item">🏷 60's GTs</span>
+          <span class="cal-detail-item">👥 7/20 pilotes</span>
+        </div>
+        <div class="bar-track slots-bar" style="margin-top:8px"><div class="bar-fill bar-g" style="width:35%"></div></div>
+      </div>
+      <div class="cal-actions">
+        <span class="pill open">Ouvert</span>
+        <button class="btn btn-red btn-sm" onclick="event.stopPropagation();openModal('modal-inscription','Nürburgring GP','12 Avr 2025','open')">S'inscrire</button>
+      </div>
+    </div>
+    <!-- event 4 — complet -->
+    <div class="cal-card">
+      <div class="cal-date-block"><div class="cal-day">26</div><div class="cal-month">Avr</div></div>
+      <div>
+        <div class="cal-name">Circuit de Barcelone</div>
+        <div class="cal-details">
+          <span class="cal-detail-item">🕗 Samedi 20h00</span>
+          <span class="cal-detail-item">⏱ 60 min</span>
+          <span class="cal-detail-item">🏷 60's GTs</span>
+          <span class="cal-detail-item">👥 20/20 pilotes</span>
+        </div>
+        <div class="bar-track slots-bar" style="margin-top:8px"><div class="bar-fill bar-r" style="width:100%"></div></div>
+      </div>
+      <div class="cal-actions">
+        <span class="pill full">Complet</span>
+        <button class="btn btn-ghost btn-sm" disabled style="opacity:.4">S'inscrire</button>
+      </div>
+    </div>
+    <!-- event 5 — terminé -->
+    <div class="cal-card" style="opacity:.6">
+      <div class="cal-date-block"><div class="cal-day">01</div><div class="cal-month" style="color:var(--gris)">Mars</div></div>
+      <div>
+        <div class="cal-name" style="color:var(--gris-lt)">Imola Circuit</div>
+        <div class="cal-details">
+          <span class="cal-detail-item">🏁 Terminé</span>
+          <span class="cal-detail-item">🏷 60's GTs</span>
+          <span class="cal-detail-item">🏆 Victoire de Nopitch_RS</span>
+        </div>
+      </div>
+      <div class="cal-actions">
+        <span class="pill done">Terminé</span>
+        <button class="btn btn-ghost btn-sm" onclick="showPage('resultats',document.querySelector('nav a:nth-child(5)'))">Résultats</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INSCRIPTION -->
+<div class="modal-overlay" id="modal-inscription" onclick="closeModal('modal-inscription')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-race-name">Inscription</div>
+      <button class="modal-close" onclick="closeModal('modal-inscription')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--gris);margin-bottom:4px" id="modal-race-date"></div>
+      <div class="form-group">
+        <label class="form-label">Sélectionner une voiture</label>
+        <select class="form-input">
+          <option>Alfa Romeo 33 Stradale — État : 78%</option>
+          <option>Ferrari 250 GTO — État : 95%</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Catégorie</label>
+        <select class="form-input">
+          <option>60's GTs — Overall</option>
+          <option>60's GTs — Italie</option>
+        </select>
+      </div>
+      <div style="background:var(--noir-3);border:1px solid var(--noir-4);border-radius:4px;padding:12px;font-size:12px;color:var(--gris-lt);">
+        📌 Une livrée personnalisée peut être uploadée depuis <strong>Mon Garage</strong> avant la course.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-inscription')">Annuler</button>
+      <button class="btn btn-red" onclick="confirmInscription()">Confirmer l'inscription</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE : GARAGE
+     ═══════════════════════════════════════════════ -->
+<div class="page" id="page-garage">
+  <div class="page-title">
+    <h1>Mon <em>Garage</em></h1>
+    <div class="page-subtitle">2 voitures · Budget : 42 500 €</div>
+  </div>
+
+  <div class="garage-grid">
+    <!-- voiture 1 -->
+    <div class="garage-card active-car">
+      <div class="gc-visual">
+        <div class="gc-emoji">🏎</div>
+        <div class="gc-badge">⭐ Active</div>
+        <div class="gc-name-overlay">Alfa Romeo 33 Stradale</div>
+      </div>
+      <div class="gc-body">
+        <div class="gc-specs">
+          <div><div class="gc-spec-lbl">Moteur</div><div class="bar-track"><div class="bar-fill bar-r" style="width:70%"></div></div><div class="gc-spec-val">LVL 7/10</div></div>
+          <div><div class="gc-spec-lbl">Aéro</div><div class="bar-track"><div class="bar-fill bar-b" style="width:60%"></div></div><div class="gc-spec-val">LVL 12/20</div></div>
+          <div><div class="gc-spec-lbl">Freins</div><div class="bar-track"><div class="bar-fill bar-go" style="width:85%"></div></div><div class="gc-spec-val">LVL 8.5/10</div></div>
+          <div><div class="gc-spec-lbl">Châssis</div><div class="bar-track"><div class="bar-fill bar-g" style="width:50%"></div></div><div class="gc-spec-val">LVL 5/10</div></div>
+        </div>
+        <div class="gc-state-row"><span class="state-lbl">État</span><span class="state-val warn">78%</span></div>
+        <div class="gc-state-row"><span class="state-lbl">Perf. globale</span><span class="state-val">+34% vs stock</span></div>
+        <div class="gc-actions">
+          <button class="btn btn-gold btn-sm" onclick="showPage('rnd',document.querySelector('nav a:nth-child(4)'))">⚡ R&amp;D</button>
+          <button class="btn btn-ghost btn-sm">🔧 Réparer</button>
+          <button class="btn btn-ghost btn-sm">🎨 Livrée</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- voiture 2 -->
+    <div class="garage-card">
+      <div class="gc-visual" style="background:linear-gradient(135deg,#0d0d0d,#1a0d0d)">
+        <div class="gc-emoji">🚗</div>
+        <div class="gc-name-overlay">Ferrari 250 GTO</div>
+      </div>
+      <div class="gc-body">
+        <div class="gc-specs">
+          <div><div class="gc-spec-lbl">Moteur</div><div class="bar-track"><div class="bar-fill bar-r" style="width:40%"></div></div><div class="gc-spec-val">LVL 4/10</div></div>
+          <div><div class="gc-spec-lbl">Aéro</div><div class="bar-track"><div class="bar-fill bar-b" style="width:25%"></div></div><div class="gc-spec-val">LVL 5/20</div></div>
+          <div><div class="gc-spec-lbl">Freins</div><div class="bar-track"><div class="bar-fill bar-go" style="width:30%"></div></div><div class="gc-spec-val">LVL 3/10</div></div>
+          <div><div class="gc-spec-lbl">Châssis</div><div class="bar-track"><div class="bar-fill bar-g" style="width:20%"></div></div><div class="gc-spec-val">LVL 2/10</div></div>
+        </div>
+        <div class="gc-state-row"><span class="state-lbl">État</span><span class="state-val">95%</span></div>
+        <div class="gc-state-row"><span class="state-lbl">Perf. globale</span><span class="state-val">+8% vs stock</span></div>
+        <div class="gc-actions">
+          <button class="btn btn-gold btn-sm">⚡ R&amp;D</button>
+          <button class="btn btn-ghost btn-sm">🎨 Livrée</button>
+          <button class="btn btn-ghost btn-sm" style="color:var(--danger);border-color:var(--danger);opacity:.7">🗑 Vendre</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- acheter voiture -->
+    <div class="garage-card" style="border-style:dashed;opacity:.6;cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:300px;transition:opacity .2s" onclick="alert('Marketplace — à venir')" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=.6">
+      <div style="text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;opacity:.5">+</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--gris)">Acheter une voiture</div>
+        <div style="font-size:12px;color:var(--gris);margin-top:6px">Budget disponible : 42 500 €</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE : R&D
+     ═══════════════════════════════════════════════ -->
+<div class="page" id="page-rnd">
+  <div class="page-title">
+    <h1>Recherche &amp; <em>Développement</em></h1>
+    <div class="page-subtitle">Améliorez votre voiture</div>
+  </div>
+
+  <div class="rnd-layout">
+    <!-- sélecteur voiture -->
+    <div class="card">
+      <div class="card-header"><div class="card-title"><div class="dot"></div>Choisir une voiture</div></div>
+      <div class="car-selector">
+        <div class="car-sel-item selected">
+          <div class="car-sel-mini">🏎</div>
+          <div><div class="car-sel-name">Alfa Romeo 33</div><div class="car-sel-state">État : 78% · Budget : 42 500€</div></div>
+        </div>
+        <div class="car-sel-item">
+          <div class="car-sel-mini">🚗</div>
+          <div><div class="car-sel-name">Ferrari 250 GTO</div><div class="car-sel-state">État : 95% · Budget : 42 500€</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- upgrades -->
+    <div class="rnd-upgrades">
+
+      <!-- MOTEUR -->
+      <div class="upgrade-card">
+        <div class="upgrade-header">
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:4px">Système</div><div class="upgrade-title">🔴 Moteur</div></div>
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:2px;text-align:right">Niveau actuel</div><div class="upgrade-lvl">7 / 10</div></div>
+        </div>
+        <div class="upgrade-body">
+          <div class="upgrade-bar-row">
+            <div class="upgrade-bar-label"><span>Progression</span><span>70%</span></div>
+            <div class="bar-track" style="height:8px"><div class="bar-fill bar-r" style="width:70%"></div></div>
+          </div>
+          <div class="upgrade-options">
+            <div class="upgrade-option" onclick="openRndModal('Moteur','Sans risque')">
+              <div class="uo-risk safe">Safe</div>
+              <div class="uo-rate">92%</div>
+              <div class="uo-gain">+0.5 LVL garanti</div>
+              <div class="uo-cost">3 200 €</div>
+            </div>
+            <div class="upgrade-option" onclick="openRndModal('Moteur','Standard')">
+              <div class="uo-risk std">Standard</div>
+              <div class="uo-rate">68%</div>
+              <div class="uo-gain">+1 LVL si succès</div>
+              <div class="uo-cost">5 800 €</div>
+            </div>
+            <div class="upgrade-option" onclick="openRndModal('Moteur','Expérimental')">
+              <div class="uo-risk exp">Expé</div>
+              <div class="uo-rate">35%</div>
+              <div class="uo-gain">+2 LVL si succès</div>
+              <div class="uo-cost">9 500 €</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AERO -->
+      <div class="upgrade-card">
+        <div class="upgrade-header">
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:4px">Système</div><div class="upgrade-title">🔵 Aérodynamique</div></div>
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:2px;text-align:right">Niveau actuel</div><div class="upgrade-lvl">12 / 20</div></div>
+        </div>
+        <div class="upgrade-body">
+          <div class="upgrade-bar-row">
+            <div class="upgrade-bar-label"><span>Progression</span><span>60%</span></div>
+            <div class="bar-track" style="height:8px"><div class="bar-fill bar-b" style="width:60%"></div></div>
+          </div>
+          <div class="upgrade-options">
+            <div class="upgrade-option" onclick="openRndModal('Aéro','Sans risque')"><div class="uo-risk safe">Safe</div><div class="uo-rate">90%</div><div class="uo-gain">+1 LVL garanti</div><div class="uo-cost">2 100 €</div></div>
+            <div class="upgrade-option" onclick="openRndModal('Aéro','Standard')"><div class="uo-risk std">Standard</div><div class="uo-rate">65%</div><div class="uo-gain">+2 LVL si succès</div><div class="uo-cost">4 200 €</div></div>
+            <div class="upgrade-option" onclick="openRndModal('Aéro','Expérimental')"><div class="uo-risk exp">Expé</div><div class="uo-rate">30%</div><div class="uo-gain">+4 LVL si succès</div><div class="uo-cost">7 800 €</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FREINS -->
+      <div class="upgrade-card">
+        <div class="upgrade-header">
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:4px">Système</div><div class="upgrade-title">🟡 Freins</div></div>
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:2px;text-align:right">Niveau actuel</div><div class="upgrade-lvl">8.5 / 10</div></div>
+        </div>
+        <div class="upgrade-body">
+          <div class="upgrade-bar-row">
+            <div class="upgrade-bar-label"><span>Progression</span><span>85%</span></div>
+            <div class="bar-track" style="height:8px"><div class="bar-fill bar-go" style="width:85%"></div></div>
+          </div>
+          <div class="upgrade-options">
+            <div class="upgrade-option" onclick="openRndModal('Freins','Sans risque')"><div class="uo-risk safe">Safe</div><div class="uo-rate">88%</div><div class="uo-gain">+0.3 LVL garanti</div><div class="uo-cost">4 500 €</div></div>
+            <div class="upgrade-option" onclick="openRndModal('Freins','Standard')"><div class="uo-risk std">Standard</div><div class="uo-rate">55%</div><div class="uo-gain">+1 LVL si succès</div><div class="uo-cost">7 200 €</div></div>
+            <div class="upgrade-option disabled"><div class="uo-risk exp">Expé</div><div class="uo-rate">—</div><div class="uo-gain">Niveau max proche</div><div class="uo-cost">N/A</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHASSIS -->
+      <div class="upgrade-card">
+        <div class="upgrade-header">
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:4px">Système</div><div class="upgrade-title">🟢 Châssis</div></div>
+          <div><div style="font-size:10px;letter-spacing:2px;color:var(--gris);text-transform:uppercase;margin-bottom:2px;text-align:right">Niveau actuel</div><div class="upgrade-lvl">5 / 10</div></div>
+        </div>
+        <div class="upgrade-body">
+          <div class="upgrade-bar-row">
+            <div class="upgrade-bar-label"><span>Progression</span><span>50%</span></div>
+            <div class="bar-track" style="height:8px"><div class="bar-fill bar-g" style="width:50%"></div></div>
+          </div>
+          <div class="upgrade-options">
+            <div class="upgrade-option" onclick="openRndModal('Châssis','Sans risque')"><div class="uo-risk safe">Safe</div><div class="uo-rate">95%</div><div class="uo-gain">+0.5 LVL garanti</div><div class="uo-cost">1 800 €</div></div>
+            <div class="upgrade-option" onclick="openRndModal('Châssis','Standard')"><div class="uo-risk std">Standard</div><div class="uo-rate">72%</div><div class="uo-gain">+1 LVL si succès</div><div class="uo-cost">3 600 €</div></div>
+            <div class="upgrade-option" onclick="openRndModal('Châssis','Expérimental')"><div class="uo-risk exp">Expé</div><div class="uo-rate">40%</div><div class="uo-gain">+2.5 LVL si succès</div><div class="uo-cost">6 400 €</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL R&D CONFIRMATION -->
+<div class="modal-overlay" id="modal-rnd" onclick="closeModal('modal-rnd')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="rnd-modal-title">Lancer le développement</div>
+      <button class="modal-close" onclick="closeModal('modal-rnd')">✕</button>
+    </div>
+    <div class="modal-body" id="rnd-modal-body">
+      <div style="background:var(--noir-3);border:1px solid var(--accent-dim);border-radius:4px;padding:14px;font-size:13px;color:var(--gris-lt)">
+        ⚠️ En confirmant, vous engagez ce budget. En cas d'échec, les fonds ne sont pas remboursés.
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;padding:4px 0">
+        <span style="color:var(--gris)">Budget actuel</span><span style="font-weight:700">42 500 €</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;padding:4px 0" id="rnd-cost-row">
+        <span style="color:var(--gris)">Coût opération</span><span style="color:var(--accent);font-weight:700">− 5 800 €</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;padding:4px 0;border-top:1px solid var(--noir-4)">
+        <span style="color:var(--gris)">Budget restant</span><span style="color:var(--success);font-weight:700">36 700 €</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-rnd')">Annuler</button>
+      <button class="btn btn-red" onclick="runRnd()">Lancer le développement</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL R&D RÉSULTAT -->
+<div class="modal-overlay" id="modal-rnd-result" onclick="closeModal('modal-rnd-result')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header" id="rnd-result-header">
+      <div class="modal-title">Résultat</div>
+      <button class="modal-close" onclick="closeModal('modal-rnd-result')">✕</button>
+    </div>
+    <div class="result-success" id="rnd-result-body">
+      <div class="result-icon">🎉</div>
+      <div class="result-title">Développement réussi !</div>
+      <div class="result-desc">+1 LVL Moteur — Nouveau niveau : 8/10</div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-green" onclick="closeModal('modal-rnd-result')">Parfait !</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE : RÉSULTATS
+     ═══════════════════════════════════════════════ -->
+<div class="page" id="page-resultats">
+  <div class="page-title">
+    <h1>Résul<em>tats</em></h1>
+    <div class="page-subtitle">Saison 2025</div>
+  </div>
+
+  <div class="results-tabs">
+    <button class="rtab active" onclick="showTab('palmares')">Mon Palmarès</button>
+    <button class="rtab" onclick="showTab('championship')">Championnat</button>
+    <button class="rtab" onclick="showTab('courses')">Courses</button>
+  </div>
+
+  <!-- PALMARÈS -->
+  <div class="results-content active" id="tab-palmares">
+    <div class="palmares-grid">
+      <div class="palmares-card"><div class="palm-value" style="color:var(--accent)">7</div><div class="palm-label">Courses disputées</div></div>
+      <div class="palmares-card"><div class="palm-value" style="color:var(--gold)">3</div><div class="palm-label">Victoires</div></div>
+      <div class="palmares-card"><div class="palm-value" style="color:var(--success)">5</div><div class="palm-label">Podiums</div></div>
+      <div class="palmares-card"><div class="palm-value" style="color:var(--gris-lt)">4<sup style="font-size:.5em;color:var(--gris)">e</sup></div><div class="palm-label">Classement actuel</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title"><div class="dot"></div>Dernières courses</div></div>
+      <div class="course-result-item">
+        <div class="cr-pos p1">1<sup style="font-size:.5em">er</sup></div>
+        <div><div class="cr-circuit">Imola Circuit</div><div class="cr-meta">01 Mars 2025 · Alfa Romeo 33 · 60's GTs</div></div>
+        <div class="cr-pts"><div class="cr-pts-val">+30</div><div class="cr-pts-lbl">points</div></div>
+      </div>
+      <div class="course-result-item">
+        <div class="cr-pos p3">3<sup style="font-size:.5em">e</sup></div>
+        <div><div class="cr-circuit">Silverstone Classic</div><div class="cr-meta">15 Fév 2025 · Alfa Romeo 33 · 60's GTs</div></div>
+        <div class="cr-pts"><div class="cr-pts-val">+15</div><div class="cr-pts-lbl">points</div></div>
+      </div>
+      <div class="course-result-item">
+        <div class="cr-pos p1">1<sup style="font-size:.5em">er</sup></div>
+        <div><div class="cr-circuit">Monza GP</div><div class="cr-meta">01 Fév 2025 · Alfa Romeo 33 · 60's GTs</div></div>
+        <div class="cr-pts"><div class="cr-pts-val">+30</div><div class="cr-pts-lbl">points</div></div>
+      </div>
+      <div class="course-result-item">
+        <div class="cr-pos" style="color:var(--gris);font-size:22px;font-family:'Barlow Condensed',sans-serif;font-weight:900;">7<sup style="font-size:.5em">e</sup></div>
+        <div><div class="cr-circuit">Spa Historic</div><div class="cr-meta">15 Jan 2025 · Ferrari 250 GTO · 60's GTs</div></div>
+        <div class="cr-pts"><div class="cr-pts-val" style="color:var(--gris)">+6</div><div class="cr-pts-lbl">points</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAMPIONNAT -->
+  <div class="results-content" id="tab-championship">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><div class="dot go"></div>Classement — 60's Time Machine</div>
+        <select class="form-input" style="font-size:11px;padding:4px 10px;width:auto">
+          <option>Overall</option><option>60's GTs — Italie</option><option>60's GTs — France</option>
+        </select>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>#</th><th>Pilote</th><th>Équipe</th><th>Voiture</th><th>Courses</th><th>Pts</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--gold);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:18px">1</td><td>Nopitch_RS</td><td>RS Factory</td><td>Ferrari 250 GTO</td><td>7</td><td style="font-weight:700;color:var(--gold)">214</td></tr>
+          <tr><td style="color:var(--gris-lt);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:18px">2</td><td>Cocci_Events</td><td>Cocci Racing</td><td>AC Cobra 427</td><td>7</td><td style="font-weight:700">202</td></tr>
+          <tr><td style="color:#cd7f32;font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:18px">3</td><td>Boule_GR</td><td>GR Motorsport</td><td>Shelby Cobra</td><td>6</td><td style="font-weight:700">199</td></tr>
+          <tr class="me"><td style="color:var(--success);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:18px">4</td><td style="color:var(--success)">Kent_LeFredge ◄</td><td>—</td><td>Alfa Romeo 33</td><td>7</td><td style="font-weight:700;color:var(--success)">187</td></tr>
+          <tr><td style="color:var(--gris);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:18px">5</td><td>Turbotard_RS</td><td>Turbo Racing</td><td>Lotus Elan</td><td>7</td><td style="font-weight:700">171</td></tr>
+          <tr><td style="color:var(--gris);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:18px">6</td><td>Lokopixo</td><td>Pixel Racing</td><td>Abarth 1000</td><td>6</td><td style="font-weight:700">158</td></tr>
+          <tr><td style="color:var(--gris);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:18px">7</td><td>Tibéo_RS</td><td>—</td><td>Austin-Healey</td><td>5</td><td style="font-weight:700">122</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- COURSES -->
+  <div class="results-content" id="tab-courses">
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <select class="form-input" style="width:auto">
+        <option>Mes courses</option><option>Toutes les courses</option>
+      </select>
+      <select class="form-input" style="width:auto">
+        <option>Tous les circuits</option><option>Imola</option><option>Monza</option><option>Spa</option>
+      </select>
+    </div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>Date</th><th>Circuit</th><th>Pos.</th><th>Voiture</th><th>Pts</th><th>Dégats</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--gris)">01/03</td><td>Imola</td><td style="color:var(--gold);font-weight:700">1er</td><td>Alfa 33</td><td style="color:var(--success);font-weight:700">+30</td><td style="color:var(--warning)">12%</td></tr>
+          <tr><td style="color:var(--gris)">15/02</td><td>Silverstone</td><td style="font-weight:700">3e</td><td>Alfa 33</td><td style="color:var(--success);font-weight:700">+15</td><td style="color:var(--success)">5%</td></tr>
+          <tr><td style="color:var(--gris)">01/02</td><td>Monza</td><td style="color:var(--gold);font-weight:700">1er</td><td>Alfa 33</td><td style="color:var(--success);font-weight:700">+30</td><td style="color:var(--warning)">18%</td></tr>
+          <tr><td style="color:var(--gris)">15/01</td><td>Spa Historic</td><td style="font-weight:700">7e</td><td>Ferrari 250</td><td style="color:var(--success);font-weight:700">+6</td><td style="color:var(--danger)">31%</td></tr>
+          <tr><td style="color:var(--gris)">01/01</td><td>Barcelone</td><td style="color:var(--gold);font-weight:700">1er</td><td>Alfa 33</td><td style="color:var(--success);font-weight:700">+30</td><td style="color:var(--success)">8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── NAVIGATION ──────────────────────────────────
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── MODALS ───────────────────────────────────────
+function openModal(id, name, date, status) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (name) document.getElementById('modal-race-name').textContent = name;
+  if (date) document.getElementById('modal-race-date').textContent = '📅 ' + date;
+  if (status === 'reg') {
+    // déjà inscrit → changer le bouton
+  }
+  el.classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function confirmInscription() {
+  closeModal('modal-inscription');
+  // feedback visuel
+  const btn = document.createElement('div');
+  btn.style.cssText = 'position:fixed;bottom:24px;right:24px;background:var(--secondary);color:#fff;padding:14px 20px;border-radius:6px;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;z-index:9999;animation:fadeIn .3s ease';
+  btn.textContent = '✓ Inscription confirmée — Entry list mise à jour';
+  document.body.appendChild(btn);
+  setTimeout(() => btn.remove(), 3000);
+}
+
+// ── R&D ─────────────────────────────────────────
+let currentRnd = { system: '', type: '' };
+
+function openRndModal(system, type) {
+  currentRnd = { system, type };
+  document.getElementById('rnd-modal-title').textContent = system + ' — ' + type;
+  const costs = {'Sans risque':3200,'Standard':5800,'Expérimental':9500};
+  const cost = costs[type] || 5800;
+  document.getElementById('rnd-cost-row').innerHTML =
+    '<span style="color:var(--gris)">Coût opération</span><span style="color:var(--accent);font-weight:700">− ' + cost.toLocaleString('fr') + ' €</span>';
+  openModal('modal-rnd');
+}
+
+function runRnd() {
+  closeModal('modal-rnd');
+  const rates = {'Sans risque':0.92,'Standard':0.68,'Expérimental':0.35};
+  const rate = rates[currentRnd.type] || 0.68;
+  const success = Math.random() < rate;
+  const header = document.getElementById('rnd-result-header');
+  const body = document.getElementById('rnd-result-body');
+  if (success) {
+    header.style.background = 'var(--secondary)';
+    body.innerHTML = '<div class="result-icon">🎉</div><div class="result-title">Succès !</div><div class="result-desc">+1 LVL ' + currentRnd.system + ' — Développement ' + currentRnd.type + ' réussi</div>';
+  } else {
+    header.style.background = 'var(--accent-dim)';
+    body.innerHTML = '<div class="result-icon">💸</div><div class="result-title" style="color:var(--accent)">Échec</div><div class="result-desc">Le développement ' + currentRnd.type + ' a échoué. Budget engagé perdu.</div>';
+  }
+  document.getElementById('modal-rnd-result').classList.add('open');
+}
+
+// ── RÉSULTATS TABS ───────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.results-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ── CAR SELECTOR R&D ─────────────────────────────
+document.querySelectorAll('.car-sel-item').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.car-sel-item').forEach(i => i.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+// ── FILTER BTNS ──────────────────────────────────
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
